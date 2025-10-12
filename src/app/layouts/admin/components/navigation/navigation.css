@@ -1,0 +1,14 @@
+a.active {
+  background-color: #eaf2ff;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+a.active .material-icons {
+  color: #1e40af;
+}
+
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+}

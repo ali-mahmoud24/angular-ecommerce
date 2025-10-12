@@ -1,0 +1,15 @@
+.toolbar {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  color: #111;
+  height: 64px;
+}
+
+.title {
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.spacer {
+  flex: 1;
+}

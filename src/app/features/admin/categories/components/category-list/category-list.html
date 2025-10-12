@@ -1,0 +1,132 @@
+<div class="flex flex-col h-full">
+  <!-- Header -->
+  <header class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">Categories</h2>
+    <button
+      (click)="openForm()"
+      class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-4 h-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Add Category
+    </button>
+  </header>
+
+  <!-- Loading State -->
+  @if (loading) {
+  <div class="flex-1 flex items-center justify-center text-gray-500 text-sm">
+    Loading categories...
+  </div>
+  }
+
+  <!-- Table -->
+  @if (!loading && categories.length > 0) {
+  <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-100">
+    <table class="min-w-full text-sm text-gray-700">
+      <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+        <tr>
+          <th class="text-left p-3">Image</th>
+          <th class="text-left p-3">Name</th>
+          <th class="text-right p-3">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (category of categories; track category.id) {
+        <tr class="border-b hover:bg-gray-50 transition-colors duration-150">
+          <td class="p-3">
+            <img
+              [src]="category.imageUrl"
+              [alt]="category.name"
+              class="w-12 h-12 object-cover rounded-md border border-gray-200"
+            />
+          </td>
+          <td class="p-3 font-medium text-gray-800">
+            {{ category.name }}
+          </td>
+          <td class="p-3 text-right space-x-2">
+            <!-- Edit Button -->
+            <button
+              (click)="openForm(category)"
+              class="inline-flex items-center justify-center w-8 h-8 text-blue-600 hover:text-blue-800 rounded-md hover:bg-blue-50 transition-colors"
+              title="Edit"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232a2.5 2.5 0 113.536 3.536L8.5 19.036l-4 1 1-4 10.732-10.804z"
+                />
+              </svg>
+            </button>
+
+            <!-- Delete Button -->
+            <button
+              (click)="delete(category.id)"
+              class="inline-flex items-center justify-center w-8 h-8 text-red-600 hover:text-red-800 rounded-md hover:bg-red-50 transition-colors"
+              title="Delete"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading && categories.length === 0) {
+  <div class="flex-1 flex items-center justify-center text-gray-400">No categories found.</div>
+  }
+
+  <!-- Modal -->
+  @if (showForm) {
+  <div
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
+    (click)="closeForm()"
+  >
+    <div
+      class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative transform transition-all duration-300 animate-slide-up"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        (click)="closeForm()"
+        class="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
+      >
+        &times;
+      </button>
+
+      <app-category-form [data]="selectedCategory" (close)="closeForm($event)"></app-category-form>
+    </div>
+  </div>
+  }
+</div>
