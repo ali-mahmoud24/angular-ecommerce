@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CategoryService } from '../../catgory.service';
+import { CategoryService } from '../../category.service';
 import { Category } from '../../category.model';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { CategoryForm } from '../category-form/category-form';

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AdminLayout } from './layouts/admin/admin-layout';
 import { BrandList } from './features/admin/brands/components/brand-list/brand-list';
 import { CategoryList } from './features/admin/categories/components/category-list/category-list';
+import { SubcategoryList } from './features/admin/subcategories/components/subcategory-list/subcategory-list';
 
 export const routes: Routes = [
   {
@@ -15,10 +16,13 @@ export const routes: Routes = [
         component: BrandList,
       },
 
-      // Repeat same pattern for other admin entities
       {
         path: 'categories',
         component: CategoryList,
+      },
+      {
+        path: 'subcategories',
+        component: SubcategoryList,
       },
     ],
   },

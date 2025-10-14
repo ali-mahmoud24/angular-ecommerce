@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CategoryService } from '../../catgory.service';
+import { CategoryService } from '../../category.service';
 import { Category } from '../../category.model';
 import { ToastService } from '../../../../../core/services/toast.service';
 
