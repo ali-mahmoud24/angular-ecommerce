@@ -1,0 +1,10 @@
+<div class="max-w-4xl mx-auto px-6 py-10">
+    <div *ngIf="loading" class="text-center text-gray-500 py-20">Loading brand details...</div>
+    <div *ngIf="error" class="text-center text-red-500 py-10">{{ error }}</div>
+
+    <div *ngIf="!loading && brand" class="bg-white shadow rounded-2xl p-8 text-center">
+        <img [src]="brand.imageUrl" [alt]="brand.name" class="w-40 h-40 object-contain mx-auto mb-6" />
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ brand.name }}</h2>
+        <p class="text-gray-600 text-lg">{{ brand.slug }}</p>
+    </div>
+</div>

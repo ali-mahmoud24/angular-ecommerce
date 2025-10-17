@@ -1,0 +1,17 @@
+<div class="max-w-7xl mx-auto px-6 py-10">
+    <div *ngIf="loading" class="text-center text-gray-500 py-20">
+        Loading category details...
+    </div>
+
+    <div *ngIf="error" class="text-center text-red-500 py-10">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!loading && !error && category" class="space-y-10">
+        <div class="text-center">
+            <img [src]="category.imageUrl" [alt]="category.name"
+                class="w-40 h-40 object-cover mx-auto rounded-full shadow" />
+            <h2 class="text-3xl font-bold text-gray-800 mt-4">{{ category.name }}</h2>
+            <p class="text-gray-500 mt-2">{{ category.slug }}</p>
+        </div>
+    </div>
