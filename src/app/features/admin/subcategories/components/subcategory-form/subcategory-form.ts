@@ -33,12 +33,16 @@ export class SubcategoryForm implements OnInit {
     });
   }
 
+  private getCategoryId(category: string | Category): string {
+    return typeof category === 'object' ? category.id : category;
+  }
+
   ngOnInit() {
     this.loadCategories(() => {
       if (this.data) {
         this.form.patchValue({
           name: this.data.name,
-          category: this.data.category?.id || this.data.category,
+          category: this.getCategoryId(this.data.category),
         });
       }
     });
@@ -77,6 +81,14 @@ export class SubcategoryForm implements OnInit {
           this.data ? 'Subcategory updated successfully' : 'Subcategory created successfully',
           'success'
         );
+
+        // ✅ Convert category ID → category object (so UI shows name)
+        if (typeof subcategory.category === 'string') {
+          const matchedCategory = this.categories.find((cat) => cat.id === subcategory.category);
+          if (matchedCategory) subcategory.category = matchedCategory;
+        }
+
+        // ✅ Emit the fixed subcategory to parent
         this.close.emit({ updated: true, subcategory });
       },
       error: (err) => {

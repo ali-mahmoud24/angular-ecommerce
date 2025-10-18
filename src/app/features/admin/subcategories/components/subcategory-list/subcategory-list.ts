@@ -19,6 +19,10 @@ export class SubcategoryList implements OnInit {
 
   constructor(private service: SubcategoryService, private toast: ToastService) {}
 
+  getCategoryName(sub: Subcategory): string {
+    return typeof sub.category === 'object' ? sub.category.name : sub.category;
+  }
+
   ngOnInit() {
     this.loadSubcategories();
   }

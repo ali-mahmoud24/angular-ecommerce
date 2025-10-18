@@ -31,7 +31,7 @@
             <tr class="border-b hover:bg-gray-50 transition">
               <td class="p-3 font-medium text-gray-800">{{ sub.name }}</td>
               <td class="p-3 text-gray-600">
-                {{ sub.category?.name || sub.category }}
+                {{ getCategoryName(sub) }}
               </td>
               <td class="p-3 text-right space-x-2">
                 <button

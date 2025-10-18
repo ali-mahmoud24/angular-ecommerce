@@ -13,6 +13,10 @@ export class CategoryService {
     return this.http.get<Category[]>(this.endpoint);
   }
 
+  getOneById(id: string): Observable<Category> {
+    return this.http.get<Category>(`${this.endpoint}/${id}`);
+  }
+
   create(data: FormData): Observable<Category> {
     return this.http.post<Category>(this.endpoint, data);
   }

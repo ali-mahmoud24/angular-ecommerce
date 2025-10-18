@@ -13,6 +13,10 @@ export class SubcategoryService {
     return this.http.get<Subcategory[]>(this.endpoint);
   }
 
+  getByCategory(categoryId: string): Observable<Subcategory[]> {
+    return this.http.get<Subcategory[]>(`categories/${categoryId}/subcategories`);
+  }
+
   create(data: { name: string; category: string }): Observable<Subcategory> {
     return this.http.post<Subcategory>(this.endpoint, data);
   }

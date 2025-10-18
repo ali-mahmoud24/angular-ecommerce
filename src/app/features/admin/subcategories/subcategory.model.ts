@@ -4,7 +4,7 @@ export interface Subcategory {
   id: string;
   name: string;
   slug?: string;
-  category: Category; // populated or id
+  category: Category | string;
   createdAt?: string;
   updatedAt?: string;
 }
