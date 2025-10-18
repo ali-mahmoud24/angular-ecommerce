@@ -1,0 +1,77 @@
+<h2 class="text-xl font-semibold mb-4">
+  {{ data ? 'Edit Product' : 'Add Product' }}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+  <div>
+    <label class="block text-gray-600 mb-1">User first Name</label>
+    <input
+      formControlName="firstName"
+      type="text"
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+      placeholder="Enter User first name"
+    />
+  </div>
+
+  <div>
+    <label class="block text-gray-600 mb-1">User last Name</label>
+    <input
+      formControlName="lastName"
+      type="text"
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+      placeholder="Enter User last name"
+    />
+  </div>
+
+  <div>
+    <label class="block text-gray-600 mb-1">User email</label>
+    <input
+      formControlName="email"
+      type="text"
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+      placeholder="Enter User email"
+    />
+  </div>
+
+  <div>
+    <label class="block text-gray-600 mb-1">User role</label>
+    <select
+      formControlName="role"
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+    >
+      <option value="" disabled selected>Select role</option>
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="block text-gray-600 mb-1">Profile Image</label>
+    <input
+      type="file"
+      (change)="onFileChange($event)"
+      class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+    />
+    @if (profileImagePreview) {
+    <img [src]="profileImagePreview" class="mt-3 w-24 h-24 object-cover rounded-lg border" />
+    }
+  </div>
+
+  <div class="flex justify-end space-x-3 pt-4 border-t">
+    <button
+      type="button"
+      (click)="close.emit({ updated: false })"
+      class="px-4 py-2 border rounded-lg hover:bg-gray-100 transition"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="submit"
+      [disabled]="loading"
+      class="relative px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
+    >
+      {{ loading ? (data ? 'Updating...' : 'Creating...') : data ? 'Update' : 'Create' }}
+    </button>
+  </div>
+</form>
