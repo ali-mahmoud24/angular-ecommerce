@@ -1,0 +1,145 @@
+<div class="flex flex-col h-full">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">Products</h2>
+    <button
+      (click)="openForm()"
+      class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+    >
+      + Add Product
+    </button>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+  <div class="flex-1 flex items-center justify-center text-gray-500 text-sm">
+    Loading products...
+  </div>
+  <!-- Empty State -->
+  } @else if (!products.length) {
+  <p class="text-center text-gray-500">No products found.</p>
+  } @else {
+  <!-- Table -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-100">
+  <table class="min-w-full text-sm text-gray-700 table-auto sm:table-fixed">
+      <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+        <tr>
+          <th class="text-left p-3">Image Cover</th>
+          <th class="text-left p-3">Title</th>
+          <th class="text-left p-3">Category</th>
+          <th class="text-left p-3">Brand</th>
+          <th class="text-left p-3">Price (EGP)</th>
+          <th class="text-left p-3">Quantity</th>
+          <th class="text-right p-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products; track product.id; let i = $index) {
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 border-b">
+            <img
+              [src]="product.imageCoverUrl || '/assets/placeholder.png'"
+              alt="product"
+              class="w-14 h-14 object-cover rounded-md border"
+            />
+          </td>
+          <td class="px-4 py-3 border-b font-medium text-gray-800">
+            {{ product.title }}
+          </td>
+          <td class="px-4 py-3 border-b text-gray-600">
+            {{
+                typeof product.category === 'string'
+                  ? product.category
+                  : product.category.name
+            }}
+          </td>
+          <td class="px-4 py-3 border-b text-gray-600">
+            {{
+                typeof product.brand === 'string'
+                  ? product.brand
+                  : product.brand.name
+            }}
+          </td>
+          <td class="px-4 py-3 border-b text-gray-700">
+            {{ product.price | number : '1.2-2' }}
+          </td>
+          <td class="px-4 py-3 border-b text-gray-700">
+            {{ product.quantity }}
+          </td>
+          <td class="p-3 text-right space-x-2 border-b text-gray-700">
+            <!-- Edit Button -->
+            <button
+              (click)="openForm(product)"
+              class="inline-flex items-center justify-center w-8 h-8 text-blue-600 hover:text-blue-800 rounded-md hover:bg-blue-50 transition-colors"
+              title="Edit"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232a2.5 2.5 0 113.536 3.536L8.5 19.036l-4 1 1-4 10.732-10.804z"
+                />
+              </svg>
+            </button>
+
+            <!-- Delete Button -->
+            <button
+              (click)="delete(product.id)"
+              class="inline-flex items-center justify-center w-8 h-8 text-red-600 hover:text-red-800 rounded-md hover:bg-red-50 transition-colors"
+              title="Delete"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <!-- Modal -->
+  @if (showForm) {
+  <div
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
+    (click)="closeForm()"
+  >
+    <!-- Modal Container -->
+    <div
+      class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] p-6 relative overflow-y-auto transform transition-all duration-300 animate-slide-up"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Close Button -->
+      <button
+        (click)="closeForm()"
+        class="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-2xl"
+      >
+        &times;
+      </button>
+
+      <!-- Product Form -->
+      <app-product-form [data]="selectedProduct" (close)="closeForm($event)"></app-product-form>
+    </div>
+  </div>
+  }
+</div>
