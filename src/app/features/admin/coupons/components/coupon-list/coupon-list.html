@@ -1,0 +1,79 @@
+<div class="flex flex-col h-full">
+  <header class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">Coupons</h2>
+    <button
+      (click)="openForm()"
+      class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 transition"
+    >
+      + Add Coupon
+    </button>
+  </header>
+
+  @if (loading) {
+  <div class="flex-1 flex items-center justify-center text-gray-500 text-sm">
+    Loading coupons...
+  </div>
+  } @if (!loading && coupons.length > 0) {
+  <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-100">
+    <table class="min-w-full text-sm text-gray-700">
+      <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+        <tr>
+          <th class="text-left p-3">Name</th>
+          <th class="text-left p-3">Discount</th>
+          <th class="text-left p-3">Expiry Date</th>
+          <th class="text-right p-3">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (coupon of coupons; track coupon.id) {
+        <tr class="border-b hover:bg-gray-50 transition">
+          <td class="p-3 font-medium text-gray-800">{{ coupon.name }}</td>
+          <td class="p-3 text-gray-600">{{ coupon.discount }}%</td>
+          <td class="p-3 text-gray-600">
+            {{ coupon.expiryDate | date : 'mediumDate' }}
+          </td>
+          <td class="p-3 text-right space-x-2">
+            <button
+              (click)="openForm(coupon)"
+              class="inline-flex items-center justify-center w-8 h-8 text-blue-600 hover:text-blue-800 rounded-md hover:bg-blue-50"
+              title="Edit"
+            >
+              ✎
+            </button>
+            <button
+              (click)="delete(coupon.id)"
+              class="inline-flex items-center justify-center w-8 h-8 text-red-600 hover:text-red-800 rounded-md hover:bg-red-50"
+              title="Delete"
+            >
+              ✖
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  } @if (!loading && coupons.length === 0) {
+  <div class="flex-1 flex items-center justify-center text-gray-400">No coupons found.</div>
+  } @if (showForm) {
+  <div
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
+    (click)="closeForm()"
+  >
+    <div
+      class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        (click)="closeForm()"
+        class="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
+      >
+        &times;
+      </button>
+
+      <app-coupon-form [data]="selectedCoupon" (close)="closeForm($event)"></app-coupon-form>
+    </div>
+  </div>
+  }
+</div>
