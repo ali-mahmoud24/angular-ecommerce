@@ -3,6 +3,9 @@ import { AdminLayout } from './layouts/admin/admin-layout';
 import { BrandList } from './features/admin/brands/components/brand-list/brand-list';
 import { CategoryList } from './features/admin/categories/components/category-list/category-list';
 import { SubcategoryList } from './features/admin/subcategories/components/subcategory-list/subcategory-list';
+import { CouponList } from './features/admin/coupons/components/coupon-list/coupon-list';
+import { ProductList } from './features/admin/products/components/product-list/product-list';
+import { UserList } from './features/admin/users/components/user-list/user-list';
 
 export const routes: Routes = [
   {
@@ -23,6 +26,18 @@ export const routes: Routes = [
       {
         path: 'subcategories',
         component: SubcategoryList,
+      },
+      {
+        path: 'coupons',
+        component: CouponList,
+      },
+      {
+        path: 'products',
+        component: ProductList,
+      },
+      {
+        path: 'users',
+        component: UserList,
       },
     ],
   },
