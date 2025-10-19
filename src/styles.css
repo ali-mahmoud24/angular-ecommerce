@@ -2,6 +2,9 @@
 
 @import 'tailwindcss';
 
+/* Include Flowbite plugin */
+@plugin "flowbite/plugin";
+
 html,
 body {
   height: 100%;

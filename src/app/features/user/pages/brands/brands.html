@@ -1,0 +1,24 @@
+<div class="max-w-7xl mx-auto px-6 py-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Our Brands</h2>
+
+    <div *ngIf="loading" class="text-center text-gray-500 py-20">Loading brands...</div>
+    <div *ngIf="error" class="text-center text-red-500 py-10">{{ error }}</div>
+
+    <div *ngIf="!loading && !error && brands.length > 0" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div *ngFor="let brand of brands"
+            class="bg-white rounded-2xl shadow hover:shadow-xl transition cursor-pointer overflow-hidden group">
+            <img [src]="brand.imageUrl" [alt]="brand.name"
+                class="w-full h-40 object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
+            <div class="p-4 text-center">
+                <h3 class="font-semibold text-gray-800 text-lg">{{ brand.name }}</h3>
+                <a [routerLink]="['/brands', brand.id]" class="text-blue-600 text-sm font-medium hover:underline">
+                    View Details →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && !error && brands.length === 0" class="text-center text-gray-500 py-20">
+        No brands found.
+    </div>
+</div>

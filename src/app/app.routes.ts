@@ -42,12 +42,22 @@ export const routes: Routes = [
     ],
   },
 
-  // USER layout (later)
-  // {
-  //   path: '',
-  //   component: UserLayoutComponent,
-  //   children: [...]
-  // },
+  // USER layout
+  {
+    path: '',
+    component: UserLayoutComponent,
+    children: [
+      {
+        path: 'auth',
+        loadChildren: () => import('./features/user/auth/auth.routes').then((m) => m.AUTH_ROUTES),
+      },
+      {
+        path: '',
+        loadChildren: () => import('./features/user/user.routes').then((m) => m.USER_ROUTES),
+      },
+      { path: '**', redirectTo: '' },
+    ],
+  },
 
   { path: '**', redirectTo: 'admin' },
 ];
