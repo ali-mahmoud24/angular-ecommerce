@@ -14,6 +14,16 @@ export class AdminLayout {
   constructor(private router: Router) {}
 
   sidebarOpen = false;
+  collapsed = false;
+
+    get windowWidth(): number {
+    return window.innerWidth;
+  }
+
+
+  toggleCollapse() {
+    this.collapsed = !this.collapsed;
+  }
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;

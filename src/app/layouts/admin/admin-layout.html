@@ -1,10 +1,16 @@
 <div class="flex h-screen bg-gray-50 text-gray-800 overflow-hidden">
   <!-- Sidebar -->
   <div
-    class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out md:static md:translate-x-0"
+    class="fixed inset-y-0 left-0 z-40 bg-white border-r border-gray-200 transform transition-all duration-300 ease-in-out md:static md:translate-x-0"
+    [class.w-64]="!collapsed"
+    [class.w-20]="collapsed"
     [class.-translate-x-full]="!sidebarOpen"
   >
-    <app-navigation (closeMenu)="closeSidebar()"></app-navigation>
+    <app-navigation
+      [collapsed]="collapsed"
+      (toggleCollapse)="toggleCollapse()"
+      (closeMenu)="closeSidebar()"
+    ></app-navigation>
   </div>
 
   <!-- Overlay for mobile -->
@@ -21,6 +27,7 @@
     <header
       class="flex items-center justify-between p-4 bg-white border-b border-gray-200"
     >
+      <!-- Left Side -->
       <div class="flex items-center gap-3">
         <button
           class="md:hidden p-2 rounded-lg hover:bg-gray-100"
@@ -28,7 +35,12 @@
         >
           <span class="material-icons">menu</span>
         </button>
-        <h1 class="font-semibold text-lg text-blue-600">Shoply</h1>
+
+        <h1 class="font-semibold text-lg text-blue-600 transition-all duration-300"
+            [class.opacity-0]="collapsed && windowWidth >= 768"
+            [class.w-0]="collapsed && windowWidth >= 768">
+          Shoply
+        </h1>
       </div>
 
       <!-- Logout Button -->

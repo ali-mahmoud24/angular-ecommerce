@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output , Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -10,7 +10,12 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./navigation.css'],
 })
 export class Navigation {
+
+
+  @Input() collapsed = false;
+  @Output() toggleCollapse = new EventEmitter<void>();
   @Output() closeMenu = new EventEmitter<void>();
+
 
   menu = [
     { label: 'Brands', icon: 'store', route: '/admin/brands' },
