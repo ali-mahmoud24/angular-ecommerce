@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+/* Include Flowbite plugin */
+@plugin "flowbite/plugin";
+
+/* Let Tailwind scan Flowbite components */
+@source "../node_modules/flowbite";

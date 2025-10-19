@@ -22,18 +22,16 @@ export class CartComponent implements OnInit {
   cart: CartItem[] = [];
   loading = true;
   error: string | null = null;
-  totalCartPrice = 0;
 
   ngOnInit() {
     this.fetchCart();
   }
 
+  /** Fetch all cart data from API */
   fetchCart() {
     this.loading = true;
     this.productService.getCart().subscribe({
       next: (res: any) => {
-        console.log('Fetched raw cart data:', res);
-
         const cartData = res.data || {};
         const items = cartData.cartItems || [];
 
@@ -45,8 +43,6 @@ export class CartComponent implements OnInit {
           color: item.color,
         }));
 
-        this.totalCartPrice = cartData.totalCartPrice || 0;
-        console.log('Mapped cart:', this.cart);
         this.loading = false;
       },
       error: (err) => {
@@ -57,10 +53,12 @@ export class CartComponent implements OnInit {
     });
   }
 
+  /** Increase quantity */
   increaseQuantity(item: CartItem) {
     this.updateQuantity(item, item.quantity + 1);
   }
 
+  /** Decrease quantity (or remove if last) */
   decreaseQuantity(item: CartItem) {
     if (item.quantity > 1) {
       this.updateQuantity(item, item.quantity - 1);
@@ -69,28 +67,40 @@ export class CartComponent implements OnInit {
     }
   }
 
+  /** Update quantity and total instantly, sync with backend */
   updateQuantity(item: CartItem, quantity: number) {
     item.loading = true;
+
+    // ✅ instant local update
+    item.quantity = quantity;
+
+    // ✅ sync with backend
     this.productService.updateCartItem(item.id, quantity).subscribe({
       next: () => {
-        item.quantity = quantity;
         item.loading = false;
       },
       error: (err) => {
         console.error('Failed to update quantity:', err);
         item.loading = false;
+
+        // Optional rollback if you want accuracy
+        this.fetchCart();
       },
     });
   }
 
+  /** Remove an item instantly and sync with backend */
   removeItem(item: CartItem) {
     item.loading = true;
-    this.productService.removeCartItem(item.id, item.color).subscribe({
-      next: () => {
-        this.cart = this.cart.filter((p) => p.id !== item.id);
-      },
+    const id = item.id;
+    this.cart = this.cart.filter((p) => p.id !== id); // ✅ remove locally for instant UI update
+
+    this.productService.removeCartItem(id, item.color).subscribe({
+      next: () => { },
       error: (err) => {
         console.error('Failed to remove item:', err);
+        // Optional rollback if needed:
+        this.fetchCart();
       },
       complete: () => {
         item.loading = false;
@@ -98,12 +108,12 @@ export class CartComponent implements OnInit {
     });
   }
 
+  /** Clear the entire cart */
   clearCart() {
     this.loading = true;
     this.productService.clearCart().subscribe({
       next: () => {
         this.cart = [];
-        this.totalCartPrice = 0;
       },
       error: (err) => {
         console.error('Failed to clear cart:', err);
@@ -114,7 +124,8 @@ export class CartComponent implements OnInit {
     });
   }
 
+  /** ✅ Always calculate total live */
   get total() {
-    return this.totalCartPrice || this.cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
+    return this.cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
   }
 }
