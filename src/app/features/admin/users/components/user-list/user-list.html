@@ -33,6 +33,7 @@
           <th class="text-left p-3">Profile Image</th>
           <th class="text-left p-3">Full Name</th>
           <th class="text-left p-3">Email</th>
+          <th class="text-left p-3">Phone</th>
           <th class="text-left p-3">Role</th>
           <th class="text-left p-3">Status</th>
           <th class="text-right p-3">Actions</th>
@@ -54,6 +55,9 @@
           </td>
           <td class="p-3 font-medium text-gray-800">
             {{ user.email }}
+          </td>
+          <td class="p-3 font-medium text-gray-800">
+            {{ user.phone }}
           </td>
           <td class="p-3 font-medium text-gray-800">
             {{ user.role | uppercase }}
@@ -124,17 +128,19 @@
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
     (click)="closeForm()"
   >
+    <!-- Modal Container -->
     <div
-      class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative transform transition-all duration-300 animate-slide-up"
+      class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] p-6 relative overflow-y-auto transform transition-all duration-300 animate-slide-up"
       (click)="$event.stopPropagation()"
     >
+      <!-- Close Button -->
       <button
         (click)="closeForm()"
-        class="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
+        class="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-2xl"
       >
         &times;
       </button>
-
+      <!-- User Form -->
       <app-user-form [data]="selectedUser" (close)="closeForm($event)" />
     </div>
   </div>

@@ -181,7 +181,7 @@ export class ProductForm implements OnInit, OnDestroy {
           if (file instanceof File) formData.append('images', file);
         });
       } else if (key === 'imageCover') {
-        // ✅ only append new imageCover if user selected one
+        //  only append new imageCover if user selected one
         if (value instanceof File) formData.append('imageCover', value);
       } else if (value !== null && value !== undefined) {
         formData.append(key, value as any);

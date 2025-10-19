@@ -1,62 +1,112 @@
 <h2 class="text-xl font-semibold mb-4">
-  {{ data ? 'Edit Product' : 'Add Product' }}
+  {{ data ? 'Edit User' : 'Add User' }}
 </h2>
 
 <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+  <!-- First Name -->
   <div>
-    <label class="block text-gray-600 mb-1">User first Name</label>
+    <label class="block text-gray-600 mb-1">First Name</label>
     <input
       formControlName="firstName"
       type="text"
-      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-      placeholder="Enter User first name"
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+      placeholder="Enter first name"
     />
+    @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+      <small class="text-red-500">First name must be at least 3 characters.</small>
+    }
   </div>
 
+  <!-- Last Name -->
   <div>
-    <label class="block text-gray-600 mb-1">User last Name</label>
+    <label class="block text-gray-600 mb-1">Last Name</label>
     <input
       formControlName="lastName"
       type="text"
-      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-      placeholder="Enter User last name"
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+      placeholder="Enter last name"
     />
+    @if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+      <small class="text-red-500">Last name must be at least 3 characters.</small>
+    }
   </div>
 
+  <!-- Email -->
   <div>
-    <label class="block text-gray-600 mb-1">User email</label>
+    <label class="block text-gray-600 mb-1">Email</label>
     <input
       formControlName="email"
-      type="text"
-      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-      placeholder="Enter User email"
+      type="email"
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+      placeholder="Enter email"
     />
+    @if (form.get('email')?.invalid && form.get('email')?.touched) {
+      <small class="text-red-500">Please enter a valid email.</small>
+    }
   </div>
 
+  <!-- Phone -->
   <div>
-    <label class="block text-gray-600 mb-1">User role</label>
+    <label class="block text-gray-600 mb-1">Phone</label>
+    <input
+      formControlName="phone"
+      type="tel"
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+      placeholder="Enter phone number"
+    />
+    @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+      <small class="text-red-500">Enter a valid phone number.</small>
+    }
+  </div>
+
+  <!-- Role -->
+  <div>
+    <label class="block text-gray-600 mb-1">Role</label>
     <select
       formControlName="role"
-      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
     >
-      <option value="" disabled selected>Select role</option>
+      <option value="" disabled>Select role</option>
       <option value="user">User</option>
       <option value="admin">Admin</option>
     </select>
+    @if (form.get('role')?.invalid && form.get('role')?.touched) {
+      <small class="text-red-500">Role is required.</small>
+    }
   </div>
 
+  <!-- Password (only for creation) -->
+  @if (!data) {
+    <div>
+      <label class="block text-gray-600 mb-1">Password</label>
+      <input
+        formControlName="password"
+        type="password"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+        placeholder="Enter password"
+      />
+      @if (form.get('password')?.invalid && form.get('password')?.touched) {
+        <small class="text-red-500">Password must be at least 6 characters.</small>
+      }
+    </div>
+  }
+
+  <!-- Profile Image -->
   <div>
     <label class="block text-gray-600 mb-1">Profile Image</label>
     <input
       type="file"
       (change)="onFileChange($event)"
-      class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+      class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
+             file:rounded-lg file:border-0 file:text-sm file:font-semibold
+             file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
     />
     @if (profileImagePreview) {
-    <img [src]="profileImagePreview" class="mt-3 w-24 h-24 object-cover rounded-lg border" />
+      <img [src]="profileImagePreview" class="mt-3 w-24 h-24 object-cover rounded-lg border" />
     }
   </div>
 
+  <!-- Buttons -->
   <div class="flex justify-end space-x-3 pt-4 border-t">
     <button
       type="button"
