@@ -21,7 +21,6 @@ export class AuthService {
     const raw = localStorage.getItem('user');
     if (raw) {
       this._user$.next(JSON.parse(raw));
-      this.redirectBasedOnRole();
     } else {
       this.router.navigateByUrl('/auth/login');
     }

@@ -41,11 +41,10 @@ export class LoginComponent {
 
     const credentials = {
       email: this.email,
-      password: this.password
+      password: this.password,
     };
 
-
-    this.authService.login({ email: this.email, password: this.password }).subscribe({
+    this.authService.login(credentials).subscribe({
       next: () => {
         this.loading = false;
         this.toastService.show('Welcome back!', 'success');
@@ -56,7 +55,7 @@ export class LoginComponent {
         this.loading = false;
         this.error = err.error?.message || 'Invalid email or password';
         this.toastService.show(this.error ?? 'An unexpected error occurred', 'error');
-
+        console.error(err);
       },
     });
   }
