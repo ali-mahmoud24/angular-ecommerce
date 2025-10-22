@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "rmdir /s /q dist && ng build --configuration production --base-href 'https://ali-mahmoud24.github.io/angular-ecommerce/' && copy dist\\ecommerce-app\\browser\\index.html dist\\ecommerce-app\\browser\\404.html && npx angular-cli-ghpages --dir=dist/ecommerce-app/browser --branch=gh-pages --repo=https://github.com/ali-mahmoud24/angular-ecommerce.git"
+    "deploy": "ng build --configuration production --base-href https://ali-mahmoud24.github.io/angular-ecommerce/ && npx angular-cli-ghpages --dir=dist/ecommerce-app/browser --branch=gh-pages"
   },
   "prettier": {
     "printWidth": 100,
