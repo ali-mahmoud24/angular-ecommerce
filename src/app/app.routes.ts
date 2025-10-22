@@ -29,17 +29,17 @@ export const routes: Routes = [
     ],
   },
 
+  // Public routes (auth)
+  {
+    path: 'auth',
+    canActivate: [LoggedInGuard],
+    loadChildren: () => import('./features/user/auth/auth.routes').then((m) => m.AUTH_ROUTES),
+  },
   //  User layout
   {
     path: '',
     component: UserLayout,
     children: [
-      // Public routes (auth)
-      {
-        path: 'auth',
-        canActivate: [LoggedInGuard],
-        loadChildren: () => import('./features/user/auth/auth.routes').then((m) => m.AUTH_ROUTES),
-      },
 
       // Protected user routes
       {

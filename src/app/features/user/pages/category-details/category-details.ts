@@ -5,10 +5,8 @@ import { CategoryService } from '../../../../core/services/category.service';
 
 @Component({
   selector: 'app-category-details',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './category-details.html',
-  styleUrls: ['./category-details.css']
 })
 export class CategoryDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -33,7 +31,7 @@ export class CategoryDetailsComponent implements OnInit {
     this.categoryService.getCategoryById(id).subscribe({
       next: (res) => {
         console.log('Fetched category:', res);
-        this.category = res.data || res; // depending on API shape
+        this.category = res.data || res;
         this.loading = false;
       },
       error: (err) => {

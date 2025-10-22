@@ -5,7 +5,6 @@ import { BrandService } from '../../../../core/services/brand.service';
 
 @Component({
   selector: 'app-brand-details',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './brand-details.html',
 })

@@ -8,6 +8,7 @@ import { BrandService } from '../../../../core/services/brand.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './brands.html',
+    styleUrls: ['./brands.css']
 })
 export class BrandsComponent implements OnInit {
   private brandService = inject(BrandService);

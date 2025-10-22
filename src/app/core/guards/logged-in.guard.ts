@@ -4,7 +4,6 @@ import { AuthService } from '../services/auth.service';
 
 export const LoggedInGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
-  const router = inject(Router);
 
   if (auth.isLoggedIn) {
     auth.redirectBasedOnRole();

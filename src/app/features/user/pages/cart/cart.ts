@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../../core/services/product.service';
+import { RouterLink } from '@angular/router';
 
 interface CartItem {
   id: string;
@@ -13,9 +14,9 @@ interface CartItem {
 
 @Component({
   selector: 'app-cart',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './cart.html',
+  styleUrls: ['./cart.css']
 })
 export class CartComponent implements OnInit {
   private productService = inject(ProductService);
@@ -27,7 +28,6 @@ export class CartComponent implements OnInit {
     this.fetchCart();
   }
 
-  /** Fetch all cart data from API */
   fetchCart() {
     this.loading = true;
     this.productService.getCart().subscribe({
@@ -53,12 +53,10 @@ export class CartComponent implements OnInit {
     });
   }
 
-  /** Increase quantity */
   increaseQuantity(item: CartItem) {
     this.updateQuantity(item, item.quantity + 1);
   }
 
-  /** Decrease quantity (or remove if last) */
   decreaseQuantity(item: CartItem) {
     if (item.quantity > 1) {
       this.updateQuantity(item, item.quantity - 1);
@@ -67,14 +65,9 @@ export class CartComponent implements OnInit {
     }
   }
 
-  /** Update quantity and total instantly, sync with backend */
   updateQuantity(item: CartItem, quantity: number) {
     item.loading = true;
-
-    // ✅ instant local update
     item.quantity = quantity;
-
-    // ✅ sync with backend
     this.productService.updateCartItem(item.id, quantity).subscribe({
       next: () => {
         item.loading = false;
@@ -82,24 +75,20 @@ export class CartComponent implements OnInit {
       error: (err) => {
         console.error('Failed to update quantity:', err);
         item.loading = false;
-
-        // Optional rollback if you want accuracy
         this.fetchCart();
       },
     });
   }
 
-  /** Remove an item instantly and sync with backend */
   removeItem(item: CartItem) {
     item.loading = true;
     const id = item.id;
-    this.cart = this.cart.filter((p) => p.id !== id); // ✅ remove locally for instant UI update
+    this.cart = this.cart.filter((p) => p.id !== id);
 
     this.productService.removeCartItem(id, item.color).subscribe({
       next: () => { },
       error: (err) => {
         console.error('Failed to remove item:', err);
-        // Optional rollback if needed:
         this.fetchCart();
       },
       complete: () => {
@@ -108,7 +97,6 @@ export class CartComponent implements OnInit {
     });
   }
 
-  /** Clear the entire cart */
   clearCart() {
     this.loading = true;
     this.productService.clearCart().subscribe({
@@ -124,8 +112,7 @@ export class CartComponent implements OnInit {
     });
   }
 
-  /** ✅ Always calculate total live */
   get total() {
-    return this.cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
+    return this.cart.reduce((sum, p) => sum + p.price * p.quantity, 0).toFixed(2);
   }
 }

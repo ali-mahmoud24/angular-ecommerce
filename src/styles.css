@@ -1,14 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
-
-/* Include Flowbite plugin */
 @plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+
+
+.nav-link {
+  @apply text-white font-medium transition-all duration-200 relative px-3 py-1.5 rounded-lg;
+}
+
+.nav-link:hover {
+  @apply bg-white/10;
+}
+
+.active-link {
+  @apply bg-white/20 text-white font-semibold shadow-sm backdrop-blur-sm;
+}
+
+.mobile-link {
+  @apply block w-full text-white font-medium px-3 py-2 rounded-lg transition-all duration-200;
+}
+
+.mobile-link:hover {
+  @apply bg-white/10;
+}
+
+.mobile-active {
+  @apply bg-white/20 text-white font-semibold shadow-sm backdrop-blur-sm;
+}
+
+.logout-btn {
+  @apply bg-white/20 text-white font-medium px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-white/30;
+}
+
 
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
@@ -18,6 +49,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -27,6 +59,7 @@ body {
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
@@ -37,6 +70,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

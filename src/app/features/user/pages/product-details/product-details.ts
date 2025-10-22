@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../../core/services/product.service';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-product-details',
@@ -13,6 +14,7 @@ import { ProductService } from '../../../../core/services/product.service';
 export class ProductDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
+  private toast = inject(ToastService);
 
   product: any;
   loading = true;
@@ -35,6 +37,7 @@ export class ProductDetailsComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading product:', err);
+        this.toast.show('Failed to load product details', 'error');
         this.loading = false;
       },
     });
@@ -51,10 +54,8 @@ export class ProductDetailsComponent implements OnInit {
     const color = this.selectedColor || 'Default';
     this.productService.addToCart(this.product.id, color, this.quantity).subscribe({
       next: () => {
-        alert(`${this.product.title} added to cart successfully!`);
+        this.toast.show(`${this.product.title} added to cart successfully!`, 'success');
         this.addingToCart = false;
-
-        // Update localStorage
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         const existing = cart.find(
           (p: any) => p.id === this.product.id && p.color === color
@@ -68,9 +69,15 @@ export class ProductDetailsComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to add to cart:', err);
-        alert('Failed to add product to cart. Please check login or permissions.');
+        this.toast.show('Failed to add product to cart. Please check login or permissions.', 'error');
         this.addingToCart = false;
       },
     });
+  }
+
+  onQuantityChange(product: any) {
+    if (product.quantity < 1 || !product.quantity) {
+      product.quantity = 1;
+    }
   }
 }
