@@ -1,1 +1,0 @@
-import{Da as n,Na as a,m as e,q as i}from"./chunk-2AKTDUK2.js";var o=class t{http=i(n);API_URL=a.apiUrl;getBrands(){return this.http.get(`${this.API_URL}/brands`)}getBrandById(r){return this.http.get(`${this.API_URL}/brands/${r}`)}static \u0275fac=function(s){return new(s||t)};static \u0275prov=e({token:t,factory:t.\u0275fac,providedIn:"root"})};export{o as a};
