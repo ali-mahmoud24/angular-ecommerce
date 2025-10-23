@@ -1,25 +1,24 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { Navigation } from './components/navigation/navigation';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
-  standalone: true,
   imports: [CommonModule, RouterOutlet, Navigation],
   templateUrl: './admin-layout.html',
   styleUrls: ['./admin-layout.css'],
 })
 export class AdminLayout {
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService) {}
 
   sidebarOpen = false;
   collapsed = false;
 
-    get windowWidth(): number {
+  get windowWidth(): number {
     return window.innerWidth;
   }
-
 
   toggleCollapse() {
     this.collapsed = !this.collapsed;
@@ -34,9 +33,6 @@ export class AdminLayout {
   }
 
   logout() {
-    // Clear token or session data
-    localStorage.removeItem('token');
-    // Navigate to login or landing page
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }

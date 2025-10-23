@@ -1,32 +1,35 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+    providedIn: 'root'
+})
 export class ToastService {
-  private container: HTMLElement | null = null;
+    show(message: string, type: 'success' | 'error' | 'info' = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `
+        flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white
+        rounded-lg shadow-sm dark:text-gray-400 dark:bg-gray-800 fixed top-5 right-5
+        animate-fade-in z-50
+        `;
 
-  constructor() {
-    this.ensureContainer();
-  }
+        let iconColor = 'text-green-500 bg-green-100 dark:bg-green-800 dark:text-green-200';
+        if (type === 'error') {
+            iconColor = 'text-red-500 bg-red-100 dark:bg-red-800 dark:text-red-200';
+        }
 
-  private ensureContainer() {
-    if (!this.container) {
-      this.container = document.createElement('div');
-      this.container.className = 'fixed top-5 right-5 z-[1000] flex flex-col gap-3';
-      document.body.appendChild(this.container);
+        toast.innerHTML = `
+        <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 ${iconColor} rounded-lg">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+            </svg>
+        </div>
+        <div class="ms-3 text-sm font-normal">${message}</div>
+        `;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
     }
-  }
-
-  show(message: string, type: 'success' | 'error' = 'success') {
-    const el = document.createElement('div');
-    el.className = `
-      px-4 py-2 rounded-lg shadow text-white text-sm font-medium
-      animate-fade-in
-      ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}
-    `;
-    el.textContent = message;
-
-    this.container?.appendChild(el);
-    setTimeout(() => el.classList.add('opacity-0'), 2500);
-    setTimeout(() => el.remove(), 3000);
-  }
 }
