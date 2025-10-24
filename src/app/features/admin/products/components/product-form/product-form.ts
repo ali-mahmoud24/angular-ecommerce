@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormArray,
@@ -30,7 +37,7 @@ export class ProductForm implements OnInit, OnDestroy {
   categories: Category[] = [];
   brands: Brand[] = [];
 
-  // Predefined color options
+  // Available colors
   colorOptions = ['red', 'green', 'blue', 'black', 'white', 'yellow', 'gray'];
 
   loading = false;
@@ -44,45 +51,7 @@ export class ProductForm implements OnInit, OnDestroy {
   ) {}
 
   imagePreviews: string[] = [];
-
   imageCoverPreview: string | null = null;
-
-  onImageCoverSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      this.form.patchValue({ imageCover: file });
-
-      const reader = new FileReader();
-      reader.onload = () => (this.imageCoverPreview = reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  }
-
-  onImagesSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files?.length) return;
-
-    const files = Array.from(input.files);
-    this.form.patchValue({ images: files });
-
-    this.imagePreviews = [];
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        this.imagePreviews.push(result);
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  removeImage(index: number) {
-    const files = this.form.value.images as File[];
-    files.splice(index, 1);
-    this.imagePreviews.splice(index, 1);
-    this.form.patchValue({ images: files });
-  }
 
   ngOnInit() {
     this.initForm();
@@ -90,9 +59,7 @@ export class ProductForm implements OnInit, OnDestroy {
     if (this.data) this.patchFormData();
   }
 
-  /** --------------------------
-   *  INIT FORM
-   * -------------------------- */
+  /** Initialize Form */
   initForm() {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
@@ -101,16 +68,18 @@ export class ProductForm implements OnInit, OnDestroy {
       quantity: [1, [Validators.required, Validators.min(1)]],
       category: ['', Validators.required],
       brand: [''],
-      colors: this.fb.array([]), // checkbox colors
+      colors: this.fb.array([]),
       imageCover: this.data ? [''] : ['', Validators.required],
       images: [[]],
     });
   }
 
+  /** Colors Getter **/
   get colorsArray() {
     return this.form.get('colors') as FormArray;
   }
 
+  /** Toggle Color Checkboxes */
   toggleColor(color: string, event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
     const colors = this.colorsArray;
@@ -118,26 +87,26 @@ export class ProductForm implements OnInit, OnDestroy {
     if (checked) {
       colors.push(new FormControl(color));
     } else {
-      const index = colors.controls.findIndex((ctrl) => ctrl.value === color);
-      if (index >= 0) colors.removeAt(index);
+      const i = colors.controls.findIndex((ctrl) => ctrl.value === color);
+      if (i >= 0) colors.removeAt(i);
     }
   }
 
-  /** --------------------------
-   *  LOAD OPTIONS
-   * -------------------------- */
+  /** Load Select Options */
   loadOptions() {
     this.categoryService.getAll().subscribe((res) => (this.categories = res));
     this.brandService.getAll().subscribe((res) => (this.brands = res));
   }
 
-  /** --------------------------
-   *  PATCH DATA (EDIT)
-   * -------------------------- */
+  /** Patch Edit-Mode Data */
   patchFormData() {
     const categoryId =
-      typeof this.data.category === 'object' ? this.data.category.id : this.data.category;
-    const brandId = typeof this.data.brand === 'object' ? this.data.brand.id : this.data.brand;
+      typeof this.data.category === 'object'
+        ? this.data.category.id
+        : this.data.category;
+
+    const brandId =
+      typeof this.data.brand === 'object' ? this.data.brand.id : this.data.brand;
 
     this.form.patchValue({
       title: this.data.title,
@@ -150,67 +119,92 @@ export class ProductForm implements OnInit, OnDestroy {
       images: [],
     });
 
-    //  Reset previews then fill
     this.imageCoverPreview = this.data.imageCoverUrl || null;
     this.imagePreviews = Array.isArray(this.data.imageUrls) ? [...this.data.imageUrls] : [];
 
-    //  Reset and patch colors cleanly
     this.colorsArray.clear();
     if (Array.isArray(this.data.colors)) {
-      this.data.colors.forEach((color: string) => this.colorsArray.push(new FormControl(color)));
+      this.data.colors.forEach((c: string) => this.colorsArray.push(new FormControl(c)));
     }
   }
 
-  /** --------------------------
-   *  SUBMIT
-   * -------------------------- */
+  /** Cover Image Upload */
+  onImageCoverSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.form.patchValue({ imageCover: input.files[0] });
+
+      const reader = new FileReader();
+      reader.onload = () => (this.imageCoverPreview = reader.result as string);
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  /** Additional Images Upload */
+  onImagesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const files = Array.from(input.files);
+    this.form.patchValue({ images: files });
+
+    this.imagePreviews = [];
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => this.imagePreviews.push(e.target?.result as string);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /** Remove Previewed Image */
+  removeImage(index: number) {
+    const files = this.form.value.images as File[];
+    files.splice(index, 1);
+    this.imagePreviews.splice(index, 1);
+    this.form.patchValue({ images: files });
+  }
+
+  /** Submit Form */
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.toast.show('Please fix validation errors before saving.', 'error');
+      this.toast.show('Please fix validation errors.', 'error');
       return;
     }
 
     this.loading = true;
     const formData = new FormData();
 
-    // Append all fields
     Object.entries(this.form.value).forEach(([key, value]) => {
       if (key === 'images' && Array.isArray(value)) {
         value.forEach((file) => {
           if (file instanceof File) formData.append('images', file);
         });
+      } else if (Array.isArray(value)) {
+        // ✅ Append colors as array properly
+        value.forEach((v) => formData.append(`${key}[]`, v));
       } else if (key === 'imageCover') {
-        //  only append new imageCover if user selected one
         if (value instanceof File) formData.append('imageCover', value);
-      } else if (value !== null && value !== undefined) {
+      } else {
         formData.append(key, value as any);
       }
     });
 
-    const request$ = this.data
+    const req$ = this.data
       ? this.productService.update(this.data.id, formData)
       : this.productService.create(formData);
 
-    request$.subscribe({
+    req$.subscribe({
       next: (updatedProduct) => {
         this.toast.show(
-          this.data ? 'Product updated successfully!' : 'Product created successfully!',
+          this.data ? 'Product updated!' : 'Product created!',
           'success'
         );
-
-        //  Refresh UI previews with backend response
-        this.imageCoverPreview = updatedProduct.imageCoverUrl || null;
-        this.imagePreviews = updatedProduct.imageUrls || [];
-
         this.loading = false;
         this.close.emit({ updated: true, product: updatedProduct });
       },
       error: () => {
-        this.toast.show(
-          this.data ? 'Failed to update product' : 'Failed to create product',
-          'error'
-        );
+        this.toast.show('Something went wrong', 'error');
         this.loading = false;
       },
     });
